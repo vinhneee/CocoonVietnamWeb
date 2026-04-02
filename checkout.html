@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thanh toán - Cocoon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Nunito', sans-serif; background: #0f0d08; color: #fff; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+    .card { background: #1d1a14; border: 1px solid #2a271f; border-radius: 0.5rem; padding: 1.25rem; }
+    .divider { height: 1px; background: #2a271f; margin: 1.25rem 0; }
+    .heading { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
+    .field-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #b5b3a3; }
+    .field-input { width: 100%; background: #0e0d08; border: 1px solid #3a362f; color: #fff; padding: 0.75rem; border-radius: 0.35rem; margin-top: 0.4rem; margin-bottom: 0.9rem; }
+    .section-title { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .summary-item { display: flex; justify-content: space-between; margin-bottom: 0.6rem; }
+    .summary-item span { color: #d7d5c8; }
+    .summary-total { font-size: 1.45rem; font-weight: 700; margin-top: 0.8rem; display: flex; justify-content: space-between; }
+    .button-primary { width: 100%; padding: 0.85rem 1rem; background: #f7e1a5; border: 1px solid #c5a25d; color: #1f1c17; font-weight: 700; border-radius: 0.4rem; cursor: pointer; }
+    .button-primary:hover { background: #d5b65e; }
+    .note { font-size: 0.8rem; color: #b7b39e; margin-top: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-4xl font-bold text-[#F5E9C7] mb-6">Thanh toán</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 card">
+        <h2 class="section-title">Thông tin liên hệ</h2>
+        <label class="field-label">Email</label>
+        <input id="checkout-email" type="email" class="field-input" placeholder="Nhập địa chỉ email" />
+        <label class="field-label"><input id="newsletter" type="checkbox" class="mr-2 align-text-bottom"/> Gửi thông tin khuyến mãi và ưu đãi đến email của tôi.</label>
+
+        <div class="divider"></div>
+
+        <h2 class="section-title">Địa chỉ giao hàng</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="field-label">Họ và tên</label>
+            <input id="checkout-name" type="text" class="field-input" placeholder="Họ và tên" />
+          </div>
+          <div>
+            <label class="field-label">Số điện thoại</label>
+            <input id="checkout-phone" type="tel" class="field-input" placeholder="Số điện thoại" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="field-label">Tỉnh/Thành phố</label>
+            <select id="checkout-city" class="field-input"><option>Chọn Tỉnh/Thành phố</option></select>
+          </div>
+          <div>
+            <label class="field-label">Quận/Huyện</label>
+            <select id="checkout-district" class="field-input"><option>Chọn Quận/Huyện</option></select>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="field-label">Phường/Xã</label>
+            <select id="checkout-ward" class="field-input"><option>Chọn Phường/Xã</option></select>
+          </div>
+          <div>
+            <label class="field-label">Số nhà, tên đường</label>
+            <input id="checkout-address" type="text" class="field-input" placeholder="Số nhà, đường" />
+          </div>
+        </div>
+
+        <label class="field-label"><input id="save-info" type="checkbox" class="mr-2 align-text-bottom"/> Lưu thông tin địa chỉ để lần thanh toán tiếp theo.</label>
+
+        <div class="divider"></div>
+
+        <h2 class="section-title">Phương thức vận chuyển</h2>
+        <label class="field-label"><input name="delivery" type="radio" value="standard" checked class="mr-2 align-text-bottom"/> Giao hàng tiêu chuẩn (3-5 ngày)</label>
+
+        <div class="divider"></div>
+
+        <h2 class="section-title">Phương thức thanh toán</h2>
+        <label class="field-label"><input name="payment" type="radio" value="cod" checked class="mr-2 align-text-bottom"/> Thanh toán khi giao hàng (COD)</label><br />
+        <label class="field-label"><input name="payment" type="radio" value="momo" class="mr-2 align-text-bottom"/> Thanh toán bằng ví Momo</label><br />
+        <label class="field-label"><input name="payment" type="radio" value="card" class="mr-2 align-text-bottom"/> Thanh toán thẻ ATM/VISA/MASTERCARD</label>
+
+        <div class="divider"></div>
+
+        <h2 class="section-title">Tặng quà</h2>
+        <label class="field-label"><input id="gift" type="checkbox" class="mr-2 align-text-bottom"/> Gửi kèm lời nhắn</label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+          <input id="from-name" type="text" class="field-input" placeholder="Tên người gửi" />
+          <input id="to-name" type="text" class="field-input" placeholder="Tên người nhận" />
+        </div>
+        <textarea id="gift-message" class="field-input" rows="3" placeholder="Thông điệp (tối đa 100 chữ)"></textarea>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">Chi tiết đơn hàng</h2>
+        <div id="order-items" class="space-y-3 text-sm text-[#ddd8c2]"></div>
+
+        <div class="mt-3">
+          <label class="field-label">Mã khuyến mãi</label>
+          <div class="flex gap-2"><input id="discount-code" class="field-input" placeholder="Nhập mã"/><button id="apply-code" class="button-primary">Áp dụng</button></div>
+        </div>
+
+        <div class="summary-item"><span>Tạm tính</span><span id="order-subtotal">0 đ</span></div>
+        <div class="summary-item"><span>Giảm giá</span><span id="order-discount">0 đ</span></div>
+        <div class="summary-item"><span>Phí vận chuyển</span><span id="order-shipping">0 đ</span></div>
+        <div class="summary-total"><span>Tổng cộng</span><span id="order-total">0 đ</span></div>
+
+        <button id="place-order" class="button-primary">Đặt hàng</button>
+        <p class="note">* Nhấn nút Đặt hàng nghĩa là bạn đã đọc và đồng ý với điều khoản, chính sách bán hàng của Cocoon.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function formatPrice(amount) {
+      return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+    }
+
+    function calculateTotals() {
+      const subtotal = cart.reduce((sum, item) => {
+        const p = Number(item.price.replace(/[^\d]/g, ''));
+        return sum + p * item.quantity;
+      }, 0);
+      const discount = 0;
+      const shipping = subtotal > 0 ? 25000 : 0;
+      const total = subtotal - discount + shipping;
+
+      document.getElementById('order-subtotal').textContent = formatPrice(subtotal);
+      document.getElementById('order-discount').textContent = formatPrice(discount);
+      document.getElementById('order-shipping').textContent = formatPrice(shipping);
+      document.getElementById('order-total').textContent = formatPrice(total);
+    }
+
+    function renderOrderItems() {
+      const container = document.getElementById('order-items');
+      if (!cart.length) {
+        container.innerHTML = '<p class="text-gray-500">Chưa có sản phẩm trong giỏ hàng.</p>';
+        calculateTotals();
+        return;
+      }
+
+      container.innerHTML = cart.map(item => `
+        <div class="grid grid-cols-3 gap-2 items-center border-b border-[#2a271f] pb-2">
+          <div class="col-span-1"><img src="${item.image}" class="w-full h-16 object-cover rounded-sm" alt="${item.title}"/></div>
+          <div class="col-span-2">
+            <div class="font-semibold">${item.title}</div>
+            <div class="text-xs text-[#bbb695]">${item.quantity} x ${formatPrice(Number(item.price.replace(/[^\d]/g, '')))}</div>
+          </div>
+        </div>
+      `).join('');
+
+      calculateTotals();
+    }
+
+    renderOrderItems();
+
+    document.getElementById('apply-code').addEventListener('click', () => {
+      const code = document.getElementById('discount-code').value.trim().toLowerCase();
+      let discount = 0;
+      if (code === 'cocoon10') discount = 10000;
+      document.getElementById('order-discount').textContent = formatPrice(discount);
+      calculateTotals();
+    });
+
+    document.getElementById('place-order').addEventListener('click', () => {
+      alert('Đặt hàng thành công! Cảm ơn bạn đã mua sắm.');
+      localStorage.removeItem('cart');
+      window.location.href = 'cocoon.htm';
+    });
+  </script>
+</body>
+</html>

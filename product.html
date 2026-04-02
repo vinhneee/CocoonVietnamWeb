@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cocoon - Mỹ phẩm thiên nhiên thuần chay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary-light': '#FEFBF4',
+            'primary-dark': '#1F1C17',
+            'primary-yellow': '#C5A25D',
+            'secondary-light3': '#EDE0CC',
+            'secondary-light1': '#CCB48F',
+          },
+          fontFamily: {
+            'nunito': ['Nunito', 'sans-serif'],
+            'cormorant': ['Cormorant Garamond', 'serif'],
+            'barlow': ['Barlow', 'sans-serif'],
+            'barlow-condensed': ['Barlow Condensed', 'sans-serif'],
+            'barlow-semi': ['Barlow Semi Condensed', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #FEFBF4; font-family: 'Nunito', sans-serif; color: #414548; }
+    
+    /* Navbar */
+    .navbar { height: 61px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; border-bottom: 1px solid #EDE0CC; position: sticky; top: 0; background: #FEFBF4; z-index: 50; }
+    .navbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 600; color: #1F1C17; text-decoration: none; }
+    .navbar-logo span { color: #C5A25D; }
+    
+    /* Product Card */
+    .product-image-wrapper { position: relative; background-color: #F6F4F0; border-radius: 0.25rem; aspect-ratio: 4/5; overflow: hidden; margin-bottom: 1rem; }
+    
+    /* Lớp phủ link click toàn bộ ảnh */
+    .product-link { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .product-link img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; transition: transform 0.5s ease; }
+    .group:hover .product-link img { transform: scale(1.05); }
+
+    /* Nút thêm giỏ hàng */
+    .add-to-cart-overlay { position: absolute; bottom: 0; left: 0; right: 0; z-index: 20; background: rgba(31,28,23,0.9); color: #FEFBF4; padding: 1rem; text-align: center; text-transform: uppercase; font-family: 'Barlow Semi Condensed', sans-serif; font-size: 0.875rem; transform: translateY(100%); transition: transform 0.3s ease; display: flex; justify-content: center; gap: 0.5rem; cursor: pointer; }
+    .group:hover .add-to-cart-overlay { transform: translateY(0); }
+    .add-to-cart-overlay:hover { background: #C5A25D; color: #1F1C17; }
+
+    /* Text thông tin */
+    .product-name { font-weight: 700; font-size: 0.9375rem; color: #1F1C17; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .product-name:hover { color: #C5A25D; }
+    .product-price { font-family: 'Barlow', sans-serif; font-size: 1rem; font-weight: 600; color: #1F1C17; margin-top: 0.5rem; }
+    .btn-plus { width: 32px; height: 32px; background: #EBE0D0; border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+    .btn-plus:hover { background: #1F1C17; color: #FEFBF4; }
+
+    /* Cart drawer */
+    #cart-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; z-index: 40; }
+    #cart-backdrop.open { opacity: 1; visibility: visible; }
+    #cart-drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(420px, 80vw); background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,0.2); transform: translateX(100%); transition: transform 0.3s ease; z-index: 50; overflow-y: auto; }
+    #cart-drawer.open { transform: translateX(0); }
+    #cart-drawer .cart-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1rem 0.75rem; border-bottom: 1px solid #EDE0CC; }
+    #cart-drawer .cart-items { padding: 1rem; display: grid; gap: 0.75rem; }
+    #cart-drawer .cart-item { display: grid; grid-template-columns: 56px 1fr; gap: 0.75rem; align-items: center; }
+    #cart-drawer .cart-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 0.25rem; }
+    #cart-drawer .cart-item-controls { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem; }
+    #cart-drawer .cart-item-controls button { width: 28px; height: 28px; border: 1px solid #EDE0CC; background: #fff; color: #1F1C17; border-radius: 0.25rem; }
+    #cart-drawer .cart-footer { padding: 1rem; border-top: 1px solid #EDE0CC; }
+    #cart-drawer .cart-footer .total { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 1rem; }
+    #cart-drawer .cart-footer button { width: 100%; padding: 0.9rem; background: #1F1C17; color: #FEFBF4; border: none; border-radius: 0.375rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="cocoon.htm" class="navbar-logo">Cocoon</a>
+    <div class="flex gap-4">
+      <button><i class="ph ph-magnifying-glass text-xl"></i></button>
+      <button id="cart-btn" class="relative"><i class="ph ph-shopping-cart text-xl"></i><span id="cart-count" class="absolute -top-2 -right-2 bg-primary-yellow text-primary-dark text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span></button>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <nav class="text-sm text-gray-500 mb-6">
+      <a href="cocoon.htm" class="hover:text-primary-dark">Trang chủ</a> <span class="mx-2">/</span> <span class="text-primary-dark">Tất cả sản phẩm</span>
+    </nav>
+    <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-secondary-light3 pb-6">
+      <h1 class="font-cormorant italic text-4xl lg:text-5xl text-primary-dark">Tất cả <br><span class="font-barlow-condensed font-semibold uppercase not-italic text-5xl lg:text-6xl">Sản Phẩm</span></h1>
+    </div>
+  </div>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+      
+      <div class="product-card group" data-product="sen-hau-giang">
+        <div class="product-image-wrapper">
+          <a href="product-detail.html?product=sen-hau-giang" class="product-link"><img src="Tinh chất xịt dưỡng sen hậu giang full hd.jpg" alt="Tinh chất xịt dưỡng sen Hậu Giang"></a>
+          <button class="add-to-cart-overlay"><i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ</button>
+        </div>
+        <div class="flex justify-between items-start">
+          <div class="pr-2">
+            <a href="product-detail.html?product=sen-hau-giang" class="product-name">Tinh Chất Xịt Dưỡng Sen Hậu Giang 200ml</a>
+            <p class="text-[11px] text-gray-500 uppercase mt-1">Giảm bóng nhờn & mụn</p>
+          </div>
+          <button class="btn-plus flex-shrink-0"><i class="ph ph-plus"></i></button>
+        </div>
+        <div class="product-price">395.000 đ</div>
+      </div>
+
+      <div class="product-card group" data-product="gel-khuynh-diep">
+        <div class="product-image-wrapper">
+          <a href="product-detail.html?product=gel-khuynh-diep" class="product-link"><img src="gel tắm full hd.jpg" alt="Gel tắm"></a>
+          <button class="add-to-cart-overlay"><i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ</button>
+        </div>
+        <div class="flex justify-between items-start">
+          <div class="pr-2">
+            <a href="product-detail.html?product=gel-khuynh-diep" class="product-name">Gel tắm khuynh diệp & bạc hà 500ml</a>
+            <p class="text-[11px] text-gray-500 uppercase mt-1">Cấp ẩm, làm mềm da</p>
+          </div>
+          <button class="btn-plus flex-shrink-0"><i class="ph ph-plus"></i></button>
+        </div>
+        <div class="product-price">275.000 đ <span class="text-sm text-gray-400 line-through ml-1">320.000 đ</span></div>
+      </div>
+
+      <div class="product-card group" data-product="chong-nang-bidao">
+        <div class="product-image-wrapper">
+          <a href="product-detail.html?product=chong-nang-bidao" class="product-link"><img src="Sữa chống nắng.png" alt="Chống nắng"></a>
+          <button class="add-to-cart-overlay"><i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ</button>
+        </div>
+        <div class="flex justify-between items-start">
+          <div class="pr-2">
+            <a href="product-detail.html?product=chong-nang-bidao" class="product-name">Sữa chống nắng bí đao 50ml</a>
+            <p class="text-[11px] text-gray-500 uppercase mt-1">Sáng mịn rạng rỡ</p>
+          </div>
+          <button class="btn-plus flex-shrink-0"><i class="ph ph-plus"></i></button>
+        </div>
+        <div class="product-price">115.000 đ</div>
+      </div>
+
+      <div class="product-card group" data-product="tay-da-chet-moi">
+        <div class="product-image-wrapper">
+          <a href="product-detail.html?product=tay-da-chet-moi" class="product-link"><img src="Tẩy da chết môi.png" alt="Tẩy da chết"></a>
+          <button class="add-to-cart-overlay"><i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ</button>
+        </div>
+        <div class="flex justify-between items-start">
+          <div class="pr-2">
+            <a href="product-detail.html?product=tay-da-chet-moi" class="product-name">Cà phê Đắk Lắk làm sạch da chết môi 5g</a>
+            <p class="text-[11px] text-gray-500 uppercase mt-1">Giảm rụng, kích thích mọc tóc</p>
+          </div>
+          <button class="btn-plus flex-shrink-0"><i class="ph ph-plus"></i></button>
+        </div>
+        <div class="product-price">145.000 đ</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div id="cart-backdrop"></div>
+  <aside id="cart-drawer" aria-labelledby="cart-title" aria-hidden="true">
+    <div class="cart-header">
+      <h3 id="cart-title" class="text-lg font-semibold">Giỏ hàng (<span id="drawer-count">0</span>)</h3>
+      <button id="close-cart-btn" aria-label="Đóng giỏ hàng" class="text-xl">×</button>
+    </div>
+    <div id="cart-items" class="cart-items">
+      <p class="text-gray-500">Giỏ hàng của bạn đang trống.</p>
+    </div>
+    <div class="cart-footer">
+      <div class="total"><span>Tạm tính</span><span id="cart-total">0 đ</span></div>
+      <button id="checkout-btn">Thanh toán</button>
+    </div>
+  </aside>
+
+  <script>
+    const products = {
+      'sen-hau-giang': {
+        title: 'Tinh Chất Xịt Dưỡng Sen Hậu Giang 200ml',
+        description: 'Sản phẩm có kết cấu hai tầng dầu dưỡng và tinh chất hòa quyện. Công thức kết hợp chiết xuất sen hữu cơ Hậu Giang, phức hợp prebiotics, squalane giúp cấp ẩm sâu, tăng cường độ bóng khỏe tự nhiên và bảo vệ hàng rào độ ẩm cho da nhạy cảm.',
+        price: '395.000 đ',
+        image: 'Tinh chất xịt dưỡng sen hậu giang full hd.jpg',
+        alt: 'Tinh chất xịt dưỡng sen Hậu Giang',
+        tagline: 'Cấp ẩm tức thì, cho da căng bóng',
+        breadcrumb: 'Tinh Chất Xịt Dưỡng Sen Hậu Giang',
+      },
+      'gel-khuynh-diep': {
+        title: 'Gel tắm khuynh diệp & bạc hà 500ml',
+        description: 'Gel tắm dưỡng ẩm sâu, làm sạch nhẹ nhàng, thích hợp cho da nhạy cảm và da mụn. Hương bạc hà tươi mát, làm dịu sau 1 ngày dài.',
+        price: '275.000 đ',
+        image: 'Gel tắm khuyenh diệp.png',
+        alt: 'Gel tắm khuynh diệp',
+        tagline: 'Làm dịu - Dưỡng ẩm - Sảng khoái',
+        breadcrumb: 'Gel tắm khuynh diệp & bạc hà',
+      },
+      'chong-nang-bidao': {
+        title: 'Sữa chống nắng bí đao 50ml',
+        description: 'Sản phẩm chống nắng vật lý & hóa học nhẹ dịu, không nhờn rít, hỗ trợ da sáng mịn và bảo vệ khỏi tác hại tia UV.',
+        price: '115.000 đ',
+        image: 'Sữa chống nắng.png',
+        alt: 'Sữa chống nắng bí đao',
+        tagline: 'Bảo vệ da, mịn màng cả ngày',
+        breadcrumb: 'Sữa chống nắng bí đao',
+      },
+      'tay-da-chet-moi': {
+        title: 'Cà phê Đắk Lắk làm sạch da chết môi 5g',
+        description: 'Tẩy da chết môi từ cà phê Đắk Lắk nguyên chất giúp mịn môi, giảm xỉn màu và kích thích tái tạo da.',
+        price: '145.000 đ',
+        image: 'Tẩy da chết môi.png',
+        alt: 'Tẩy da chết môi',
+        tagline: 'Môi mềm mịn tự nhiên',
+        breadcrumb: 'Cà phê Đắk Lắk làm sạch da chết môi',
+      }
+    };
+
+    // Cart functionality
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cart')) || [];
+    }
+
+    function parsePrice(priceString) {
+      if (!priceString) return 0;
+      const digits = priceString.replace(/[^.\d]/g, '').replace(/\./g, '');
+      return Number(digits) || 0;
+    }
+
+    function formatPrice(amount) {
+      return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      renderCart();
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cart-count').textContent = total;
+      document.getElementById('drawer-count').textContent = total;
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      const itemsContainer = document.getElementById('cart-items');
+      itemsContainer.innerHTML = '';
+
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = '<p class="text-gray-500">Giỏ hàng của bạn đang trống.</p>';
+        document.getElementById('cart-total').textContent = formatPrice(0);
+        return;
+      }
+
+      let total = 0;
+      cart.forEach((item) => {
+        const itemPrice = parsePrice(item.price);
+        total += itemPrice * item.quantity;
+
+        const itemBlock = document.createElement('div');
+        itemBlock.className = 'cart-item';
+        itemBlock.innerHTML = `
+          <img src="${item.image}" alt="${item.title}">
+          <div>
+            <div class="cart-item-details font-semibold">${item.title}</div>
+            <div class="cart-item-details text-sm text-gray-600">${formatPrice(itemPrice)} x ${item.quantity}</div>
+            <div class="cart-item-controls">
+              <button data-action="decrease" data-id="${item.id}">−</button>
+              <span>${item.quantity}</span>
+              <button data-action="increase" data-id="${item.id}">+</button>
+              <button data-action="remove" data-id="${item.id}" style="color:#C5A25D;">X</button>
+            </div>
+          </div>
+        `;
+        itemsContainer.appendChild(itemBlock);
+      });
+
+      document.getElementById('cart-total').textContent = formatPrice(total);
+
+      itemsContainer.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = btn.dataset.action;
+          const id = btn.dataset.id;
+          const cart = getCart();
+          const product = cart.find(i => i.id === id);
+          if (!product) return;
+
+          if (action === 'increase') {
+            product.quantity += 1;
+          } else if (action === 'decrease') {
+            if (product.quantity > 1) product.quantity -= 1;
+          } else if (action === 'remove') {
+            const index = cart.indexOf(product);
+            if (index > -1) cart.splice(index, 1);
+          }
+
+          saveCart(cart);
+        });
+      });
+    }
+
+    function openCart() {
+      document.getElementById('cart-backdrop').classList.add('open');
+      document.getElementById('cart-drawer').classList.add('open');
+      document.getElementById('cart-drawer').setAttribute('aria-hidden', 'false');
+      renderCart();
+    }
+
+    function closeCart() {
+      document.getElementById('cart-backdrop').classList.remove('open');
+      document.getElementById('cart-drawer').classList.remove('open');
+      document.getElementById('cart-drawer').setAttribute('aria-hidden', 'true');
+    }
+
+    function addToCart(productKey, quantity = 1) {
+      const cart = getCart();
+      const product = products[productKey];
+      if (!product) return;
+
+      const existing = cart.find(item => item.id === productKey);
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        cart.push({
+          id: productKey,
+          title: product.title,
+          price: product.price,
+          image: product.image,
+          quantity: quantity
+        });
+      }
+      saveCart(cart);
+      openCart();
+    }
+
+    // Cart button handle
+    document.getElementById('cart-btn').addEventListener('click', openCart);
+    document.getElementById('close-cart-btn').addEventListener('click', closeCart);
+    document.getElementById('cart-backdrop').addEventListener('click', closeCart);
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      closeCart();
+      window.location.href = 'checkout.html';
+    });
+
+    // Handle add to cart overlays
+    document.querySelectorAll('.add-to-cart-overlay').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const productKey = btn.closest('.product-card').dataset.product;
+        addToCart(productKey);
+      });
+    });
+
+    // Initialize cart count on load
+    updateCartCount();
+  </script>
+
+</body>
+</html>

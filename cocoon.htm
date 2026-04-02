@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cocoon - Mỹ phẩm thiên nhiên thuần chay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary-light': '#FEFBF4',
+            'primary-dark': '#1F1C17',
+            'primary-yellow': '#C5A25D',
+            'secondary-light3': '#EDE0CC',
+            'secondary-light1': '#CCB48F',
+            'typo-heading': '#1F1C17',
+            'typo-body': '#414548',
+            'gray-custom': '#97958F',
+          },
+          fontFamily: {
+            'nunito': ['Nunito', 'sans-serif'],
+            'cormorant': ['Cormorant Garamond', 'serif'],
+            'barlow': ['Barlow', 'sans-serif'],
+            'barlow-condensed': ['Barlow Condensed', 'sans-serif'],
+            'barlow-semi': ['Barlow Semi Condensed', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    html {
+      background-color: #FEFBF4;
+      font-family: 'Nunito', sans-serif;
+      color: #414548;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    /* ===== ANNOUNCEMENT BAR ===== */
+    .announcement-bar {
+      background-color: #1F1C17;
+      color: #FEFBF4;
+      height: 33px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8125rem;
+      font-family: 'Nunito', sans-serif;
+    }
+    .announcement-bar a {
+      color: #FEFBF4;
+      text-decoration: none;
+      position: relative;
+    }
+    .announcement-bar a::after {
+      content: '';
+      display: block;
+      border-bottom: 1px solid #FEFBF4;
+      transform: scaleX(0);
+      transition: transform 0.25s ease;
+      margin-top: 2px;
+    }
+    .announcement-bar a:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      background-color: #FEFBF4;
+      border-bottom: 0.5px solid #EDE0CC;
+      height: 61px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .navbar-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1F1C17;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .navbar-logo span {
+      color: #C5A25D;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9375rem;
+      color: #1F1C17;
+      text-decoration: none;
+      position: relative;
+      line-height: 1.375;
+      font-weight: 600;
+    }
+    .nav-links a::after {
+      content: '';
+      display: block;
+      border-bottom: 1px solid #1F1C17;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+      margin-top: 2px;
+    }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .nav-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #1F1C17;
+      display: flex;
+      align-items: center;
+      font-size: 1.25rem;
+      transition: color 0.2s ease;
+    }
+    .nav-icon-btn:hover {
+      color: #C5A25D;
+    }
+    .cart-badge {
+      background: #C5A25D;
+      color: #FEFBF4;
+      border-radius: 9999px;
+      font-size: 0.625rem;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: -8px;
+      margin-top: -12px;
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 700;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero-section {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid #EDE0CC;
+    }
+    @media (min-width: 1024px) {
+      .hero-section {
+        flex-direction: row;
+        min-height: calc(100vh - 94px); /* Trừ đi chiều cao Header */
+      }
+    }
+    .hero-image-block {
+      width: 100%;
+      height: 50vh;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    @media (min-width: 1024px) {
+      .hero-image-block {
+        width: 50%;
+        height: auto;
+        min-height: 480px;
+      }
+    }
+    .hero-text-block {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      background-color: #FFFAEF;
+      text-align: center;
+    }
+    @media (min-width: 1024px) {
+      .hero-text-block {
+        width: 50%;
+        justify-content: flex-start;
+        padding: 3rem 4.375rem;
+        text-align: left;
+      }
+    }
+    .hero-text-box { max-width: 36.25rem; }
+    .hero-subtitle {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 1.025;
+      color: #302416;
+    }
+    @media (min-width: 1024px) {
+      .hero-subtitle { font-size: 2rem; }
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.025;
+      color: #302416;
+      margin-top: 0.5rem;
+    }
+    @media (min-width: 1024px) {
+      .hero-title { font-size: 3.625rem; }
+    }
+    .hero-description {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      line-height: 1.625;
+      color: #414548;
+      margin-top: 1.5rem;
+      max-width: 25.625rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (min-width: 1024px) {
+      .hero-description { margin-left: 0; margin-right: 0; }
+    }
+
+    /* Buttons */
+    .btn-dark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background-color: #1F1C17;
+      color: #FEFBF4;
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 500;
+      font-size: 1.125rem;
+      text-transform: uppercase;
+      padding: 1.125rem 1.5rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      margin-top: 2rem;
+      white-space: nowrap;
+    }
+    @media (min-width: 1024px) {
+      .btn-dark { padding: 1.375rem 1.6875rem; }
+    }
+    .btn-dark:hover { background-color: #4E4B47; }
+    .btn-dark i { transition: transform 0.5s ease; font-size: 1.25rem;}
+    .btn-dark:hover i { transform: translateX(6px); }
+
+    .btn-light-bordered {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background-color: transparent;
+      color: #1F1C17;
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 500;
+      font-size: 1.125rem;
+      text-transform: uppercase;
+      padding: 1.375rem 1.6875rem;
+      border-radius: 4px;
+      border: 1px solid #1F1C17;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .btn-light-bordered:hover {
+      background-color: #1F1C17;
+      color: #FEFBF4;
+    }
+
+    /* ===== MARQUEE ===== */
+    .marquee-section {
+      border-top: 1px solid #EDE0CC;
+      border-bottom: 1px solid #EDE0CC;
+      overflow: hidden;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      background-color: #FEFBF4;
+    }
+    @media (min-width: 1024px) {
+      .marquee-section { height: 64px; }
+    }
+    .marquee-track {
+      display: flex;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #1F1C17;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    @media (min-width: 1024px) {
+      .marquee-item { padding: 0 2.5rem; }
+    }
+    .marquee-dot {
+      width: 5px; height: 5px;
+      border-radius: 9999px;
+      background-color: #C5A25D;
+      flex-shrink: 0;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); } /* Sẽ điều chỉnh lại HTML để lặp mượt */
+    }
+
+    /* ===== PRODUCT LIST SECTION ===== */
+    .section-title-italic {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: #1F1C17;
+      font-size: 2.5rem;
+      line-height: 1.1;
+    }
+    .section-title-bold {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #1F1C17;
+      font-style: normal;
+    }
+    @media (min-width: 1280px) {
+      .section-title-italic { font-size: 4rem; }
+    }
+
+    /* ===== PRODUCT CARD ===== (Bạn bị thiếu từ margin-top: 0.625rem; trở đi, tôi đã hoàn thiện) */
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+    }
+    .product-image-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.375rem;
+      aspect-ratio: 3/4; /* Giữ tỷ lệ ảnh */
+      background-color: #f5f5f5; /* Màu nền cho ảnh load */
+    }
+    .product-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+    .product-card:hover .product-image-wrapper img {
+      transform: scale(1.05);
+    }
+    .add-to-cart-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(31, 28, 23, 0.9);
+      color: #FEFBF4;
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 500;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1rem;
+      text-align: center;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border: none;
+    }
+    .add-to-cart-overlay:hover {
+      background: #C5A25D;
+      color: #1F1C17;
+    }
+    /* Trên Mobile hiển thị luôn nút Mua, trên PC thì Hover mới hiện */
+    @media (min-width: 1024px) {
+      .product-image-wrapper:hover .add-to-cart-overlay {
+        transform: translateY(0);
+      }
+    }
+    @media (max-width: 1023px) {
+      .add-to-cart-overlay {
+        transform: translateY(0);
+        padding: 0.75rem;
+        font-size: 0.75rem;
+      }
+    }
+    
+    .product-info {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-top: 1.25rem;
+    }
+    .product-info-left { flex: 1; padding-right: 1rem;}
+    .product-name {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #1F1C17;
+      line-height: 1.4;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .product-name:hover { color: #C5A25D; }
+    .product-subtitle {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #97958F;
+      line-height: 1.2;
+    }
+    .product-price {
+      font-family: 'Barlow', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #1F1C17;
+      margin-top: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .product-price-old {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.875rem;
+      color: #B8B6AF;
+      text-decoration: line-through;
+      font-weight: 400;
+    }
+    .btn-add-quick {
+        background-color: #EDE0CC;
+        color: #1F1C17;
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .btn-add-quick:hover {
+        background-color: #1F1C17;
+        color: #FEFBF4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="announcement-bar">
+    <a href="#">Tận hưởng giao hàng miễn phí toàn quốc với hoá đơn từ 99.000 đ</a>
+  </div>
+
+  <header class="navbar">
+    <button class="nav-icon-btn lg:hidden">
+      <i class="ph ph-list text-2xl"></i>
+    </button>
+
+<ul class="nav-links hidden lg:flex h-full items-center">
+      
+      <li class="group h-full flex items-center">
+        <a href="#products" class="block py-5">Sản phẩm</a>
+        
+        <div class="absolute left-0 top-[61px] w-full bg-primary-light border-t border-secondary-light3 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 ease-out transform -translate-y-2 group-hover:translate-y-0 z-50">
+          
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex">
+            <div class="w-1/4 pr-8 border-r border-secondary-light3">
+              <h4 class="font-cormorant italic text-2xl text-primary-dark mb-4">Chăm sóc toàn diện</h4>
+              <ul class="space-y-3 font-nunito text-base">
+                <li><a href="#" class="hover:text-primary-yellow transition-colors flex items-center gap-2"><i class="ph ph-sparkle text-primary-yellow"></i> Sản phẩm mới</a></li>
+                <li><a href="#" class="hover:text-primary-yellow transition-colors block">Chăm sóc da mặt</a></li>
+                <li><a href="#" class="hover:text-primary-yellow transition-colors block">Chăm sóc cơ thể</a></li>
+                <li><a href="#" class="hover:text-primary-yellow transition-colors block">Chăm sóc mái tóc</a></li>
+                <li><a href="#" class="hover:text-primary-yellow transition-colors block">Dưỡng môi</a></li>
+              </ul>
+            </div>
+
+            <div class="w-1/4 px-8 border-r border-secondary-light3">
+              <h4 class="font-cormorant italic text-2xl text-primary-dark mb-4">Theo nhu cầu</h4>
+              <ul class="space-y-3 font-nunito text-base">
+                <li><a href="#" class="hover:text-primary-yellow transition-colors block">Da mụn, nhạy cảm</a></li>
+                <li><a href="#" class="hover:text-primary-yellow transition-colors block">Da khô, thiếu ẩm</a></li>
+                <li><a href="#" class="hover:text-primary-yellow transition-colors block">Tóc gãy rụng</a></li>
+                <li><a href="#" class="hover:text-primary-yellow transition-colors block">Quà tặng & Combo</a></li>
+              </ul>
+              
+              <div class="mt-8 pt-4 border-t border-secondary-light3">
+                 <a href="#" class="font-bold text-sm uppercase tracking-widest text-gray-500 hover:text-primary-dark transition-colors">Khám phá nguyên liệu &rarr;</a>
+              </div>
+            </div>
+
+            <div class="w-1/2 pl-12 flex gap-6 items-center">
+              <div class="w-1/2 h-48 overflow-hidden rounded-md">
+                <img src="Subscription box.jpg" alt="Subscription Box Trạm Xanh" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+              </div>
+              <div class="w-1/2">
+                <p class="text-xs font-bold text-primary-yellow uppercase tracking-widest mb-2">Phiên bản giới hạn</p>
+                <h4 class="font-cormorant text-2xl font-bold text-primary-dark mb-2 leading-tight">Subscription Box<br>Trạm Xanh</h4>
+                <p class="text-sm text-gray-custom mb-4 leading-relaxed">Nhận định kỳ 3 sản phẩm dịu lành ngẫu nhiên mỗi tháng. Lan tỏa lối sống xanh cùng Cocoon.</p>
+                <a href="#" class="font-barlow-semi uppercase text-sm font-bold border-b border-primary-dark hover:text-primary-yellow hover:border-primary-yellow transition-colors pb-1">
+                  Đăng ký ngay
+                </a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </li>
+      
+      <li class="h-full flex items-center"><a href="#story" class="block py-5">Câu chuyện</a></li>
+    </ul>
+
+    <a href="#" class="navbar-logo">Cocoon</a>
+
+    <div class="nav-icons">
+      <ul class="nav-links hidden lg:flex mr-4">
+        <li><a href="#">Khuyến mãi</a></li>
+        <li><a href="#">VN / EN</a></li>
+      </ul>
+      <button class="nav-icon-btn hidden sm:block"><i class="ph ph-magnifying-glass"></i></button>
+      <button class="nav-icon-btn hidden sm:block"><i class="ph ph-user"></i></button>
+      <button class="nav-icon-btn">
+        <i class="ph ph-handbag"></i>
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+  </header>
+
+ <section class="hero-section">
+    <div class="hero-image-block" style="background-image: url('Subscription\ box.jpg');"></div>
+    
+    <div class="hero-text-block bg-primary-dark">
+      <div class="hero-text-box">
+        <p class="hero-subtitle text-primary-light">Chiến dịch mới</p>
+        <h1 class="hero-title text-primary-light">
+          Trạm Xanh <span class="text-primary-yellow font-vollkorn">Cocoon!</span>
+        </h1>
+        <p class="hero-description text-gray-300">
+          Gói trọn tinh túy thiên nhiên Việt Nam vào một chiếc hộp. Khám phá ngay <strong>Subscription Box</strong> phiên bản giới hạn từ Trạm Xanh — nhận định kỳ 3 sản phẩm làm đẹp dịu lành ngẫu nhiên, giúp bạn chăm sóc bản thân và lan tỏa lối sống bền vững mỗi tháng.
+        </p>
+        
+        <a href="#subscribe" class="btn-light-bordered text-primary-light border-primary-light hover:bg-primary-light hover:text-primary-dark mt-8 transition-colors duration-300">
+          <span>Đăng ký ngay</span>
+          <i class="ph ph-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="marquee-section">
+    <div class="marquee-track">
+      <div style="display: flex;">
+        <span class="marquee-item">100% Thuần Chay <div class="marquee-dot"></div></span>
+        <span class="marquee-item">Không thử nghiệm trên động vật <div class="marquee-dot"></div></span>
+        <span class="marquee-item">Nguyên liệu Việt Nam <div class="marquee-dot"></div></span>
+        <span class="marquee-item">Không cồn & Paraben <div class="marquee-dot"></div></span>
+      </div>
+      <div style="display: flex;" aria-hidden="true">
+        <span class="marquee-item">100% Thuần Chay <div class="marquee-dot"></div></span>
+        <span class="marquee-item">Không thử nghiệm trên động vật <div class="marquee-dot"></div></span>
+        <span class="marquee-item">Nguyên liệu Việt Nam <div class="marquee-dot"></div></span>
+        <span class="marquee-item">Không cồn & Paraben <div class="marquee-dot"></div></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+    <div class="text-center lg:text-left mb-12">
+      <h2 class="section-title-italic">Sản phẩm<br class="hidden lg:block"/> <span class="section-title-bold">Bán Chạy</span></h2>
+      <p class="font-nunito text-gray-custom mt-4 max-w-2xl text-sm lg:text-base">
+        Tự hào mang đến những giải pháp chăm sóc làn da và mái tóc hoàn hảo nhất từ các nguyên liệu thiên nhiên đặc hữu.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+      
+      <div class="product-card group">
+        <div class="product-image-wrapper">
+          <a href="product.html">
+            <img src="Tinh chất xịt dưỡng sen hậu giang full hd.jpg" alt="Tinh Chất Xịt Dương Sen Hậu Giang 200ml">
+          </a>
+          <button class="add-to-cart-overlay">
+            <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-info-left">
+            <a href="#" class="product-name">Tinh Chất Xịt Dương Sen Hậu Giang 200ml</a>
+            <p class="product-subtitle">Giảm bóng nhờn & mụn</p>
+            <div class="product-price">
+                395.000 đ
+            </div>
+          </div>
+          <button class="btn-add-quick hidden lg:flex" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
+        </div>
+      </div>
+
+      <div class="product-card group">
+        <div class="product-image-wrapper">
+          <a href="product.html">
+            <img src="gel tắm full hd.jpg" alt="Gel tắm khuynh diệp & bạc hà 500ml">
+          </a>
+          <button class="add-to-cart-overlay">
+            <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-info-left">
+            <a href="#" class="product-name">Gel tắm khuynh diệp & bạc hà 500ml</a>
+            <p class="product-subtitle">Cấp ẩm, làm mềm da</p>
+            <div class="product-price">
+                275.000 đ <span class="product-price-old">320.000 đ</span>
+            </div>
+          </div>
+          <button class="btn-add-quick hidden lg:flex"><i class="ph ph-plus text-xl"></i></button>
+        </div>
+      </div>
+
+      <div class="product-card group">
+        <div class="product-image-wrapper">
+          <a href="product.html">
+            <img src="chống nắng hd.png" alt="Sữa chống nắng bí đao 50ml">
+          </a>
+          <button class="add-to-cart-overlay">
+            <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-info-left">
+            <a href="#" class="product-name">Sữa chống nắng bí đao 50ml</a>
+            <p class="product-subtitle">Sáng mịn rạng rỡ</p>
+            <div class="product-price">
+                115.000 đ
+            </div>
+          </div>
+          <button class="btn-add-quick hidden lg:flex"><i class="ph ph-plus text-xl"></i></button>
+        </div>
+      </div>
+
+      <div class="product-card group">
+        <div class="product-image-wrapper">
+          <a href="product.html">
+            <img src="Cà phê Đắk Lắk làm sạch da chết môi 5g hd.jpg" alt="Cà phê Đắk Lắk làm sạch da chết môi 5g">
+          </a>
+          <button class="add-to-cart-overlay">
+            <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-info-left">
+            <a href="#" class="product-name">Cà phê Đắk Lắk làm sạch da chết môi 5g</a>
+            <p class="product-subtitle">Giảm rụng, kích thích mọc tóc</p>
+            <div class="product-price">
+                145.000 đ
+            </div>
+          </div>
+          <button class="btn-add-quick hidden lg:flex"><i class="ph ph-plus text-xl"></i></button>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="text-center mt-12">
+        <a href="product.html" class="btn-light-bordered">Xem tất cả sản phẩm</a>
+    </div>
+  </section>
+</body>
+</html>
