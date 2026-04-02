@@ -360,6 +360,7 @@
       display: flex;
       flex-direction: column;
       background: transparent;
+      position: relative;
     }
     .product-image-wrapper {
       position: relative;
@@ -421,11 +422,11 @@
     
     .product-info {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      flex-direction: column;
       padding-top: 1.25rem;
+      flex: 1;
     }
-    .product-info-left { flex: 1; padding-right: 1rem;}
+    .product-info-left { flex: 1; }
     .product-name {
       font-family: 'Nunito', sans-serif;
       font-weight: 700;
@@ -433,8 +434,12 @@
       color: #1F1C17;
       line-height: 1.4;
       text-decoration: none;
-      display: block;
-      margin-bottom: 0.25rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+      height: 2.8em;
     }
     .product-name:hover { color: #C5A25D; }
     .product-subtitle {
@@ -444,16 +449,19 @@
       letter-spacing: 0.05em;
       color: #97958F;
       line-height: 1.2;
+      height: 1.2em;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
     }
     .product-price {
       font-family: 'Barlow', sans-serif;
       font-size: 1.125rem;
       font-weight: 600;
       color: #1F1C17;
-      margin-top: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      margin-top: auto;
     }
     .product-price-old {
       font-family: 'Barlow', sans-serif;
@@ -463,7 +471,7 @@
       font-weight: 400;
     }
     .btn-add-quick {
-        background-color: #EDE0CC;
+        background-color: #EBE0D0;
         color: #1F1C17;
         width: 40px;
         height: 40px;
@@ -474,6 +482,9 @@
         border: none;
         cursor: pointer;
         transition: background-color 0.2s;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
     }
     .btn-add-quick:hover {
         background-color: #1F1C17;
@@ -618,16 +629,16 @@
           <button class="add-to-cart-overlay">
             <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
           </button>
+          <button class="btn-add-quick" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
         </div>
         <div class="product-info">
           <div class="product-info-left">
             <a href="#" class="product-name">Tinh Chất Xịt Dương Sen Hậu Giang 200ml</a>
             <p class="product-subtitle">Giảm bóng nhờn & mụn</p>
-            <div class="product-price">
-                395.000 đ
-            </div>
           </div>
-          <button class="btn-add-quick hidden lg:flex" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
+          <div class="product-price text-[#d4af37]">
+              368.000 đ
+          </div>
         </div>
       </div>
 
@@ -639,16 +650,16 @@
           <button class="add-to-cart-overlay">
             <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
           </button>
+          <button class="btn-add-quick" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
         </div>
         <div class="product-info">
           <div class="product-info-left">
             <a href="#" class="product-name">Gel tắm khuynh diệp & bạc hà 500ml</a>
             <p class="product-subtitle">Cấp ẩm, làm mềm da</p>
-            <div class="product-price">
-                275.000 đ <span class="product-price-old">320.000 đ</span>
-            </div>
           </div>
-          <button class="btn-add-quick hidden lg:flex"><i class="ph ph-plus text-xl"></i></button>
+          <div class="product-price text-[#d4af37]">
+              241.000 đ <span class="product-price-old">320.000 đ</span>
+          </div>
         </div>
       </div>
 
@@ -660,16 +671,16 @@
           <button class="add-to-cart-overlay">
             <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
           </button>
+          <button class="btn-add-quick" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
         </div>
         <div class="product-info">
           <div class="product-info-left">
             <a href="#" class="product-name">Sữa chống nắng bí đao 50ml</a>
             <p class="product-subtitle">Sáng mịn rạng rỡ</p>
-            <div class="product-price">
-                115.000 đ
-            </div>
           </div>
-          <button class="btn-add-quick hidden lg:flex"><i class="ph ph-plus text-xl"></i></button>
+          <div class="product-price text-[#d4af37]">
+              432.000 đ
+          </div>
         </div>
       </div>
 
@@ -681,16 +692,16 @@
           <button class="add-to-cart-overlay">
             <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
           </button>
+          <button class="btn-add-quick" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
         </div>
         <div class="product-info">
           <div class="product-info-left">
             <a href="#" class="product-name">Cà phê Đắk Lắk làm sạch da chết môi 5g</a>
             <p class="product-subtitle">Giảm rụng, kích thích mọc tóc</p>
-            <div class="product-price">
-                145.000 đ
-            </div>
           </div>
-          <button class="btn-add-quick hidden lg:flex"><i class="ph ph-plus text-xl"></i></button>
+          <div class="product-price text-[#d4af37]">
+              74.000 đ
+          </div>
         </div>
       </div>
 
