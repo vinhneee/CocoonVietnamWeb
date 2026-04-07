@@ -114,17 +114,35 @@
 
   <script>
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const subscriptionPlan = JSON.parse(localStorage.getItem('subscriptionPlan') || 'null');
+    let appliedDiscount = 0;
+
+    function getOrderItems() {
+      if (subscriptionPlan) {
+        return [subscriptionPlan];
+      }
+
+      return cart;
+    }
 
     function formatPrice(amount) {
       return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
     }
 
+    function getItemPrice(item) {
+      if (typeof item.priceValue === 'number') {
+        return item.priceValue;
+      }
+
+      return Number(String(item.price).replace(/[^\d]/g, ''));
+    }
+
     function calculateTotals() {
-      const subtotal = cart.reduce((sum, item) => {
-        const p = Number(item.price.replace(/[^\d]/g, ''));
-        return sum + p * item.quantity;
+      const orderItems = getOrderItems();
+      const subtotal = orderItems.reduce((sum, item) => {
+        return sum + getItemPrice(item) * item.quantity;
       }, 0);
-      const discount = 0;
+      const discount = appliedDiscount;
       const shipping = subtotal > 0 ? 25000 : 0;
       const total = subtotal - discount + shipping;
 
@@ -136,18 +154,20 @@
 
     function renderOrderItems() {
       const container = document.getElementById('order-items');
-      if (!cart.length) {
+      const orderItems = getOrderItems();
+
+      if (!orderItems.length) {
         container.innerHTML = '<p class="text-gray-500">Chưa có sản phẩm trong giỏ hàng.</p>';
         calculateTotals();
         return;
       }
 
-      container.innerHTML = cart.map(item => `
+      container.innerHTML = orderItems.map(item => `
         <div class="grid grid-cols-3 gap-2 items-center border-b border-[#2a271f] pb-2">
           <div class="col-span-1"><img src="${item.image}" class="w-full h-16 object-cover rounded-sm" alt="${item.title}"/></div>
           <div class="col-span-2">
             <div class="font-semibold">${item.title}</div>
-            <div class="text-xs text-[#bbb695]">${item.quantity} x ${formatPrice(Number(item.price.replace(/[^\d]/g, '')))}</div>
+            <div class="text-xs text-[#bbb695]">${item.quantity} x ${formatPrice(getItemPrice(item))}</div>
           </div>
         </div>
       `).join('');
@@ -159,16 +179,15 @@
 
     document.getElementById('apply-code').addEventListener('click', () => {
       const code = document.getElementById('discount-code').value.trim().toLowerCase();
-      let discount = 0;
-      if (code === 'cocoon10') discount = 10000;
-      document.getElementById('order-discount').textContent = formatPrice(discount);
+      appliedDiscount = code === 'cocoon10' ? 10000 : 0;
       calculateTotals();
     });
 
     document.getElementById('place-order').addEventListener('click', () => {
       alert('Đặt hàng thành công! Cảm ơn bạn đã mua sắm.');
       localStorage.removeItem('cart');
-      window.location.href = 'index.html';
+      localStorage.removeItem('subscriptionPlan');
+      window.location.href = 'index.html#subscribe';
     });
   </script>
 </body>
