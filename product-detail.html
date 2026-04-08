@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="products-data.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -127,46 +128,7 @@
         Có thể bạn <span class="font-[Barlow_Condensed] uppercase font-semibold not-italic text-4xl">Cũng Thích</span>
       </h2>
       
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-      <div class="product-card group relative" data-product="gel-khuynh-diep">
-        <div class="product-image-wrapper">
-          <a href="product-detail.html?product=gel-khuynh-diep" class="product-link"><img src="images/Gel tắm khuyenh diệp.png" alt="Gel tắm"></a>
-            <button class="add-to-cart-overlay"><i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ</button>
-            <button class="btn-plus flex-shrink-0"><i class="ph ph-plus"></i></button>
-          </div>
-          <div>
-            <a href="product-detail.html?product=gel-khuynh-diep" class="product-name block">Gel tắm khuynh diệp & bạc hà 500ml</a>
-            <p class="product-description">Cấp ẩm, làm mềm da</p>
-            <div class="product-price">241.000 đ <span class="text-sm text-gray-400 line-through ml-1">320.000 đ</span></div>
-          </div>
-        </div>
-
-      <div class="product-card group relative" data-product="chong-nang-bidao">
-        <div class="product-image-wrapper">
-          <a href="product-detail.html?product=chong-nang-bidao" class="product-link"><img src="images/Sữa chống nắng.png" alt="Chống nắng"></a>
-            <button class="add-to-cart-overlay"><i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ</button>
-            <button class="btn-plus flex-shrink-0"><i class="ph ph-plus"></i></button>
-          </div>
-          <div>
-            <a href="product-detail.html?product=chong-nang-bidao" class="product-name block">Sữa chống nắng bí đao 50ml</a>
-            <p class="product-description">Sáng mịn rạng rỡ</p>
-            <div class="product-price">432.000 đ</div>
-          </div>
-        </div>
-
-      <div class="product-card group relative" data-product="tay-da-chet-moi">
-        <div class="product-image-wrapper">
-          <a href="product-detail.html?product=tay-da-chet-moi" class="product-link"><img src="images/Tẩy da chết môi.png" alt="Tẩy da chết"></a>
-            <button class="add-to-cart-overlay"><i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ</button>
-            <button class="btn-plus flex-shrink-0"><i class="ph ph-plus"></i></button>
-          </div>
-          <div>
-            <a href="product-detail.html?product=tay-da-chet-moi" class="product-name block">Cà phê Đắk Lắk làm sạch da chết môi 5g</a>
-            <p class="product-description">Giảm rụng, kích thích mọc tóc</p>
-            <div class="product-price">74.000 đ</div>
-          </div>
-        </div>
-      </div>
+      <div id="related-products-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"></div>
     </div>
 
   </main>
@@ -187,51 +149,41 @@
   </aside>
 
   <script>
-    const products = {
-      'sen-hau-giang': {
-        title: 'Tinh Chất Xịt Dưỡng Sen Hậu Giang 200ml',
-        description: 'Sản phẩm có kết cấu hai tầng dầu dưỡng và tinh chất hòa quyện. Công thức kết hợp chiết xuất sen hữu cơ Hậu Giang, phức hợp prebiotics, squalane giúp cấp ẩm sâu, tăng cường độ bóng khỏe tự nhiên và bảo vệ hàng rào độ ẩm cho da nhạy cảm.',
-        price: '368.000 đ',
-        image: 'images/Tinh chất xịt dưỡng sen hậu giang full hd.jpg',
-        alt: 'Tinh chất xịt dưỡng sen Hậu Giang',
-        tagline: 'Cấp ẩm tức thì, cho da căng bóng',
-        breadcrumb: 'Tinh Chất Xịt Dưỡng Sen Hậu Giang',
-      },
-      'gel-khuynh-diep': {
-        title: 'Gel tắm khuynh diệp & bạc hà 500ml',
-        description: 'Gel tắm dưỡng ẩm sâu, làm sạch nhẹ nhàng, thích hợp cho da nhạy cảm và da mụn. Hương bạc hà tươi mát, làm dịu sau 1 ngày dài.',
-        price: '241.000 đ',
-        image: 'images/gel tắm full hd.jpg',
-        alt: 'Gel tắm khuynh diệp',
-        tagline: 'Làm dịu - Dưỡng ẩm - Sảng khoái',
-        breadcrumb: 'Gel tắm khuynh diệp & bạc hà',
-      },
-      'chong-nang-bidao': {
-        title: 'Sữa chống nắng bí đao 50ml',
-        description: 'Sản phẩm chống nắng vật lý & hóa học nhẹ dịu, không nhờn rít, hỗ trợ da sáng mịn và bảo vệ khỏi tác hại tia UV.',
-        price: '432.000 đ',
-        image: 'images/chống nắng hd.png',
-        alt: 'Sữa chống nắng bí đao',
-        tagline: 'Bảo vệ da, mịn màng cả ngày',
-        breadcrumb: 'Sữa chống nắng bí đao',
-      },
-      'tay-da-chet-moi': {
-        title: 'Cà phê Đắk Lắk làm sạch da chết môi 5g',
-        description: 'Tẩy da chết môi từ cà phê Đắk Lắk nguyên chất giúp mịn môi, giảm xỉn màu và kích thích tái tạo da.',
-        price: '74.000 đ',
-        image: 'images/Cà phê Đắk Lắk làm sạch da chết môi 5g hd.jpg',
-        alt: 'Tẩy da chết môi',
-        tagline: 'Môi mềm mịn tự nhiên',
-        breadcrumb: 'Cà phê Đắk Lắk làm sạch da chết môi',
-      }
-    };
+    const products = window.PRODUCTS_MAP || {};
+    const productList = window.PRODUCTS || [];
+    const relatedProductsGrid = document.getElementById('related-products-grid');
 
     const params = new URLSearchParams(window.location.search);
-    const key = params.get('product');
+    const key = params.get('product') || 'sen-hau-giang';
 
-    if (key && products[key]) {
+    function renderRelatedProducts(currentKey) {
+      const relatedProducts = productList.filter((product) => product.id !== currentKey);
+
+      relatedProductsGrid.innerHTML = relatedProducts.map((product) => {
+        const oldPriceMarkup = product.oldPrice
+          ? ` <span class="text-sm text-gray-400 line-through ml-1">${product.oldPrice}</span>`
+          : '';
+
+        return `
+          <div class="product-card group relative" data-product="${product.id}">
+            <div class="product-image-wrapper">
+              <a href="product-detail.html?product=${product.id}" class="product-link"><img src="${product.image}" alt="${product.alt}"></a>
+              <button class="add-to-cart-overlay" type="button"><i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ</button>
+              <button class="btn-plus flex-shrink-0" type="button"><i class="ph ph-plus"></i></button>
+            </div>
+            <div>
+              <a href="product-detail.html?product=${product.id}" class="product-name block">${product.title}</a>
+              <p class="product-description">${product.subtitle}</p>
+              <div class="product-price">${product.price}${oldPriceMarkup}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    if (products[key]) {
       const p = products[key];
-      document.title = `${p.title} - Thảo Mộc Việt`;
+      document.title = `${p.title} - Cocoon`;
       document.getElementById('product-name').textContent = p.title;
       document.getElementById('product-tagline').textContent = p.tagline;
       document.getElementById('product-price').textContent = p.price;
@@ -239,8 +191,10 @@
       document.getElementById('product-img').src = p.image;
       document.getElementById('product-img').alt = p.alt;
       document.getElementById('breadcrumb-current').textContent = p.breadcrumb;
-      document.querySelector('title').textContent = `${p.title} - Thảo Mộc Việt`;
+      document.querySelector('title').textContent = `${p.title} - Cocoon`;
     }
+
+    renderRelatedProducts(key);
 
     // Cart functionality
     function getCart() {
@@ -352,6 +306,7 @@
           id: productKey,
           title: product.title,
           price: product.price,
+          priceValue: product.priceValue,
           image: product.image,
           quantity: quantity
         });
@@ -367,18 +322,24 @@
 
     document.getElementById('checkout-btn').addEventListener('click', () => {
       closeCart();
-      window.location.href = 'checkout.html';
+      window.location.href = 'checkout.html?source=cart';
     });
 
     // Add-to-cart overlay products
-    document.querySelectorAll('.add-to-cart-overlay').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const card = btn.closest('.product-card');
-        const productKey = card ? card.dataset.product : key || 'sen-hau-giang';
-        if (!productKey) return;
-        addToCart(productKey, 1);
-      });
+    relatedProductsGrid.addEventListener('click', (e) => {
+      const button = e.target.closest('.add-to-cart-overlay, .btn-plus');
+      if (!button) {
+        return;
+      }
+
+      e.preventDefault();
+      const card = button.closest('.product-card');
+      const productKey = card ? card.dataset.product : key;
+      if (!productKey) {
+        return;
+      }
+
+      addToCart(productKey, 1);
     });
 
     // Quantity controls
@@ -399,7 +360,7 @@
 
     // Add to cart button
     document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-      const currentKey = key || 'sen-hau-giang'; // default if no query param
+      const currentKey = key;
       addToCart(currentKey, quantity);
     });
 

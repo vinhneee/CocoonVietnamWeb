@@ -11,6 +11,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="products-data.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -435,6 +436,7 @@
       line-height: 1.4;
       text-decoration: none;
       display: -webkit-box;
+      line-clamp: 2;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
@@ -619,97 +621,105 @@
       </p>
     </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-      
-      <div class="product-card group">
-        <div class="product-image-wrapper">
-          <a href="product.html">
-            <img src="images/Tinh chất xịt dưỡng sen hậu giang full hd.jpg" alt="Tinh Chất Xịt Dương Sen Hậu Giang 200ml">
-          </a>
-          <button class="add-to-cart-overlay">
-            <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
-          </button>
-          <button class="btn-add-quick" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
-        </div>
-        <div class="product-info">
-          <div class="product-info-left">
-            <a href="#" class="product-name">Tinh Chất Xịt Dương Sen Hậu Giang 200ml</a>
-            <p class="product-subtitle">Giảm bóng nhờn & mụn</p>
-          </div>
-          <div class="product-price text-[#d4af37]">
-              368.000 đ
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card group">
-        <div class="product-image-wrapper">
-          <a href="product.html">
-            <img src="images/gel tắm full hd.jpg" alt="Gel tắm khuynh diệp & bạc hà 500ml">
-          </a>
-          <button class="add-to-cart-overlay">
-            <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
-          </button>
-          <button class="btn-add-quick" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
-        </div>
-        <div class="product-info">
-          <div class="product-info-left">
-            <a href="#" class="product-name">Gel tắm khuynh diệp & bạc hà 500ml</a>
-            <p class="product-subtitle">Cấp ẩm, làm mềm da</p>
-          </div>
-          <div class="product-price text-[#d4af37]">
-              241.000 đ <span class="product-price-old">320.000 đ</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card group">
-        <div class="product-image-wrapper">
-          <a href="product.html">
-            <img src="images/chống nắng hd.png" alt="Sữa chống nắng bí đao 50ml">
-          </a>
-          <button class="add-to-cart-overlay">
-            <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
-          </button>
-          <button class="btn-add-quick" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
-        </div>
-        <div class="product-info">
-          <div class="product-info-left">
-            <a href="#" class="product-name">Sữa chống nắng bí đao 50ml</a>
-            <p class="product-subtitle">Sáng mịn rạng rỡ</p>
-          </div>
-          <div class="product-price text-[#d4af37]">
-              432.000 đ
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card group">
-        <div class="product-image-wrapper">
-          <a href="product.html">
-            <img src="images/Cà phê Đắk Lắk làm sạch da chết môi 5g hd.jpg" alt="Cà phê Đắk Lắk làm sạch da chết môi 5g">
-          </a>
-          <button class="add-to-cart-overlay">
-            <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
-          </button>
-          <button class="btn-add-quick" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
-        </div>
-        <div class="product-info">
-          <div class="product-info-left">
-            <a href="#" class="product-name">Cà phê Đắk Lắk làm sạch da chết môi 5g</a>
-            <p class="product-subtitle">Giảm rụng, kích thích mọc tóc</p>
-          </div>
-          <div class="product-price text-[#d4af37]">
-              74.000 đ
-          </div>
-        </div>
-      </div>
-
-    </div>
+    <div id="featured-products-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8"></div>
     
     <div class="text-center mt-12">
         <a href="product.html" class="btn-light-bordered">Xem tất cả sản phẩm</a>
     </div>
   </section>
+  <script>
+    const homeProducts = window.PRODUCTS || [];
+    const homeProductGrid = document.getElementById('featured-products-grid');
+    const homeCartBadge = document.querySelector('.cart-badge');
+
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cart') || '[]');
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartBadge();
+    }
+
+    function updateCartBadge() {
+      if (!homeCartBadge) {
+        return;
+      }
+
+      const count = getCart().reduce((sum, item) => sum + item.quantity, 0);
+      homeCartBadge.textContent = count;
+    }
+
+    function addToCart(productId) {
+      const product = window.PRODUCTS_MAP[productId];
+      if (!product) {
+        return;
+      }
+
+      const cart = getCart();
+      const existing = cart.find((item) => item.id === productId);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          priceValue: product.priceValue,
+          image: product.image,
+          quantity: 1
+        });
+      }
+
+      saveCart(cart);
+    }
+
+    function renderHomeCard(product) {
+      const oldPriceMarkup = product.oldPrice ? ` <span class="product-price-old">${product.oldPrice}</span>` : '';
+
+      return `
+        <div class="product-card group" data-product="${product.id}">
+          <div class="product-image-wrapper">
+            <a href="product-detail.html?product=${product.id}">
+              <img src="${product.image}" alt="${product.alt}">
+            </a>
+            <button class="add-to-cart-overlay" type="button">
+              <i class="ph ph-shopping-cart text-lg"></i> Thêm vào giỏ
+            </button>
+            <button class="btn-add-quick" type="button" title="Thêm nhanh"><i class="ph ph-plus text-xl"></i></button>
+          </div>
+          <div class="product-info">
+            <div class="product-info-left">
+              <a href="product-detail.html?product=${product.id}" class="product-name">${product.title}</a>
+              <p class="product-subtitle">${product.subtitle}</p>
+            </div>
+            <div class="product-price text-[#d4af37]">
+              ${product.price}${oldPriceMarkup}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    homeProductGrid.innerHTML = homeProducts.map(renderHomeCard).join('');
+
+    homeProductGrid.addEventListener('click', (event) => {
+      const actionButton = event.target.closest('.add-to-cart-overlay, .btn-add-quick');
+      if (!actionButton) {
+        return;
+      }
+
+      event.preventDefault();
+      const card = actionButton.closest('[data-product]');
+      if (!card) {
+        return;
+      }
+
+      addToCart(card.dataset.product);
+    });
+
+    updateCartBadge();
+  </script>
 </body>
 </html>

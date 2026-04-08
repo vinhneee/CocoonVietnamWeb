@@ -113,20 +113,38 @@
   </div>
 
   <script>
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const subscriptionPlan = JSON.parse(localStorage.getItem('subscriptionPlan') || 'null');
     let appliedDiscount = 0;
+    const checkoutSource = new URLSearchParams(window.location.search).get('source');
+
+    function loadCart() {
+      return JSON.parse(localStorage.getItem('cart') || '[]');
+    }
+
+    function loadSubscriptionPlan() {
+      return JSON.parse(localStorage.getItem('subscriptionPlan') || 'null');
+    }
 
     function getOrderItems() {
-      if (subscriptionPlan) {
-        return [subscriptionPlan];
+      const cartItems = loadCart();
+      const subscriptionPlan = loadSubscriptionPlan();
+
+      if (checkoutSource === 'subscription') {
+        return subscriptionPlan ? [subscriptionPlan] : [];
       }
 
-      return cart;
+      if (checkoutSource === 'cart') {
+        return cartItems;
+      }
+
+      if (cartItems.length > 0) {
+        return cartItems;
+      }
+
+      return subscriptionPlan ? [subscriptionPlan] : [];
     }
 
     function formatPrice(amount) {
-      return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
+      return Number(amount || 0).toLocaleString('vi-VN') + ' đ';
     }
 
     function getItemPrice(item) {
@@ -134,17 +152,21 @@
         return item.priceValue;
       }
 
-      return Number(String(item.price).replace(/[^\d]/g, ''));
+      return Number(String(item.price || '').replace(/[^\d]/g, '')) || 0;
+    }
+
+    function getItemQuantity(item) {
+      return Number(item.quantity) > 0 ? Number(item.quantity) : 1;
     }
 
     function calculateTotals() {
       const orderItems = getOrderItems();
       const subtotal = orderItems.reduce((sum, item) => {
-        return sum + getItemPrice(item) * item.quantity;
+        return sum + getItemPrice(item) * getItemQuantity(item);
       }, 0);
       const discount = appliedDiscount;
       const shipping = subtotal > 0 ? 25000 : 0;
-      const total = subtotal - discount + shipping;
+      const total = Math.max(subtotal - discount + shipping, 0);
 
       document.getElementById('order-subtotal').textContent = formatPrice(subtotal);
       document.getElementById('order-discount').textContent = formatPrice(discount);
@@ -167,7 +189,7 @@
           <div class="col-span-1"><img src="${item.image}" class="w-full h-16 object-cover rounded-sm" alt="${item.title}"/></div>
           <div class="col-span-2">
             <div class="font-semibold">${item.title}</div>
-            <div class="text-xs text-[#bbb695]">${item.quantity} x ${formatPrice(getItemPrice(item))}</div>
+            <div class="text-xs text-[#bbb695]">${getItemQuantity(item)} x ${formatPrice(getItemPrice(item))}</div>
           </div>
         </div>
       `).join('');
