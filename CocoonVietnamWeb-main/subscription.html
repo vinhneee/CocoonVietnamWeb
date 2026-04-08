@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hộp Quà Làm Đẹp Định Kỳ - Cocoon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #FEFBF4; --cream-dark: #F5EDE0; --brown-dark: #2C1F14;
+      --brown-mid: #5C3D2E; --brown-light: #A07850; --gold: #C5A25D;
+      --gold-light: #E8D5B0; --sage: #7A9E7E; --sage-light: #C8DEC9;
+      --sage-pale: #EBF3EB; --beige: #D4B896; --beige-light: #EDE0CC;
+      --text-body: #4A3728; --text-muted: #8C7B6B;
+      --shadow-sm: 0 2px 8px rgba(44,31,20,0.08);
+      --shadow-md: 0 8px 32px rgba(44,31,20,0.13);
+      --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: radial-gradient(circle at top left, #fff9ee 0%, var(--cream) 42%, #f2e8d8 100%);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text-body);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: rgba(254,251,244,0.94);
+      border-bottom: 1px solid var(--beige-light);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      backdrop-filter: blur(16px);
+    }
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--brown-dark);
+      text-decoration: none;
+    }
+    .logo em { color: var(--gold); font-style: normal; }
+    .nav-back {
+      color: var(--brown-mid);
+      text-decoration: none;
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .nav-back:hover { color: var(--brown-dark); }
+    .product-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem 5rem;
+      align-items: start;
+    }
+    .gallery-col { position: sticky; top: 100px; }
+    .main-img-wrap {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      background: var(--cream-dark);
+      box-shadow: var(--shadow-md);
+    }
+    .main-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .prod-category {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--sage);
+    }
+    .prod-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.875rem;
+      font-weight: 600;
+      color: var(--brown-dark);
+      margin-top: 0.5rem;
+      line-height: 1.05;
+    }
+    .prod-desc {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-body);
+      margin-top: 1rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--beige-light);
+    }
+    .sub-section { margin-top: 2rem; }
+    .sub-header-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--brown-dark);
+      margin-bottom: 1rem;
+    }
+    .plan-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .plan-card {
+      position: relative;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--beige-light);
+      background: rgba(255,255,255,0.92);
+      padding: 1.5rem 1rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .plan-card:hover { border-color: var(--beige); transform: translateY(-2px); }
+    .plan-card.selected {
+      border-color: var(--gold);
+      background: #FFFDF7;
+      box-shadow: 0 0 0 4px rgba(197,162,93,0.15);
+    }
+    .plan-card.featured { border-color: var(--sage); }
+    .plan-card.featured.selected {
+      border-color: var(--sage);
+      background: var(--sage-pale);
+      box-shadow: 0 0 0 4px rgba(122,158,126,0.15);
+    }
+    .plan-month { font-size: 1.25rem; font-weight: 800; color: var(--brown-dark); }
+    .plan-price-small { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
+    .badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      white-space: nowrap;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+    .badge-save { background: var(--gold-light); color: var(--brown-dark); }
+    .badge-best { background: var(--sage); color: #fff; }
+    .checkout-area {
+      margin-top: 2.5rem;
+      background: rgba(255,255,255,0.92);
+      padding: 2rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--beige-light);
+    }
+    .price-display {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .price-label { font-size: 1.1rem; font-weight: 600; color: var(--brown-dark); }
+    .price-total {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .plan-summary {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 1.25rem;
+      background: var(--brown-dark);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .btn-submit:hover { background: var(--brown-mid); }
+    .trust-note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    @media (max-width: 768px) {
+      .navbar { padding: 0 1rem; }
+      .product-layout { grid-template-columns: 1fr; gap: 2rem; padding: 0 1rem 3rem; }
+      .gallery-col { position: relative; top: 0; }
+      .plan-cards { grid-template-columns: 1fr; }
+      .prod-title { font-size: 2.25rem; }
+      .price-display { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html#subscribe" class="logo">Cocoon
+    <a href="index.html#subscribe" class="nav-back">Quay lại trang chủ</a>
+  </nav>
+
+  <main class="product-layout">
+    <div class="gallery-col">
+      <div class="main-img-wrap">
+        <img src="images/subscription-box.jpg" alt="Hộp quà làm đẹp định kỳ" />
+      </div>
+    </div>
+
+    <div class="info-col">
+      <div class="prod-category">Subscription Box</div>
+      <h1 class="prod-title">Hộp Quà Chăm Sóc Da Thiên Nhiên</h1>
+      <p class="prod-desc">
+        Hành trình nuôi dưỡng làn da mộc mạc. Mỗi tháng, bạn sẽ nhận được một hộp quà bí mật chứa 3-4 sản phẩm full-size thuần chay được tinh tuyển riêng cho loại da của bạn.
+      </p>
+
+      <div class="sub-section">
+        <div class="sub-header-label">Chọn liệu trình của bạn</div>
+        <div class="plan-cards">
+          <div class="plan-card" data-plan="1-thang" data-title="Gói Subscription Box 1 Tháng" data-price="350000" data-display-price="350.000₫" onclick="selectPlan(this)">
+            <div class="plan-month">1 Tháng</div>
+            <div class="plan-price-small">350.000đ / hộp</div>
+          </div>
+
+          <div class="plan-card" data-plan="3-thang" data-title="Gói Subscription Box 3 Tháng" data-price="950000" data-display-price="950.000₫" onclick="selectPlan(this)">
+            <div class="badge badge-save">Tiết kiệm 100K</div>
+            <div class="plan-month">3 Tháng</div>
+            <div class="plan-price-small">~ 316.000đ / hộp</div>
+          </div>
+
+          <div class="plan-card featured selected" data-plan="6-thang" data-title="Gói Subscription Box 6 Tháng" data-price="1800000" data-display-price="1.800.000₫" onclick="selectPlan(this)">
+            <div class="badge badge-best">Khuyên Dùng</div>
+            <div class="plan-month">6 Tháng</div>
+            <div class="plan-price-small">Chỉ 300.000đ / hộp</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-area">
+        <div class="price-display">
+          <span class="price-label">Tổng thanh toán:</span>
+          <span class="price-total" id="totalPriceDisplay">1.800.000₫</span>
+        </div>
+        <p class="plan-summary" id="planSummary">Bạn đang chọn liệu trình 6 tháng, giao định kỳ hằng tháng.</p>
+        <button class="btn-submit" id="subscribeButton" type="button">Đăng ký ngay</button>
+
+        <div class="trust-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Thanh toán an toàn 1 lần. Giao hàng tự động. Huỷ bất cứ lúc nào.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('vi-VN').format(amount) + '₫';
+    }
+
+    function updatePlanSummary(selectedCard) {
+      const planText = selectedCard.querySelector('.plan-month').textContent;
+      document.getElementById('planSummary').textContent = `Bạn đang chọn liệu trình ${planText.toLowerCase()}, giao định kỳ hằng tháng.`;
+    }
+
+    function selectPlan(selectedCard) {
+      const allCards = document.querySelectorAll('.plan-card');
+      allCards.forEach((card) => card.classList.remove('selected'));
+      selectedCard.classList.add('selected');
+
+      const newPrice = Number(selectedCard.getAttribute('data-price'));
+      document.getElementById('totalPriceDisplay').textContent = formatCurrency(newPrice);
+      updatePlanSummary(selectedCard);
+    }
+
+    function getSelectedPlan() {
+      const selectedCard = document.querySelector('.plan-card.selected');
+      return {
+        type: 'subscription',
+        plan: selectedCard.getAttribute('data-plan'),
+        title: selectedCard.getAttribute('data-title'),
+        priceValue: Number(selectedCard.getAttribute('data-price')),
+        price: selectedCard.getAttribute('data-display-price'),
+        quantity: 1,
+        image: 'images/subscription-box.jpg'
+      };
+    }
+
+    document.getElementById('subscribeButton').addEventListener('click', () => {
+      localStorage.setItem('subscriptionPlan', JSON.stringify(getSelectedPlan()));
+      window.location.href = 'checkout.html?source=subscription';
+    });
+  </script>
+</body>
+</html>
